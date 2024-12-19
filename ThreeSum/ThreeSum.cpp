@@ -41,23 +41,41 @@ bool ArrayExisted(const std::vector<std::vector<int>>& vov, const std::vector<in
     return false;
 }
 
+void ThreeSum(const std::vector<int>& vec, int start, int sum, std::vector<int>& a, std::vector<std::vector<int>>& result)
+{
+    if (sum == 0 && a.size() == 3)
+    {
+        if (!ArrayExisted(result, a))
+            result.push_back(a);
+        return;
+    }
+
+    if (start == static_cast<int>(vec.size()) || a.size() == 3)
+        return;
+
+    for (size_t i = start; i < vec.size(); ++i)
+    {
+        a.push_back(vec[i]);
+        ThreeSum(vec, static_cast<int>(i + 1), sum - vec[i], a, result);
+        a.pop_back();
+    }
+}
+
 std::vector<std::vector<int>> ThreeSum(std::vector<int>& vec)
 {
     std::vector<std::vector<int>> result;
+    //std::vector<int> a;
+    //ThreeSum(vec, 0, 0, a, result);
 
-    for (auto i = vec.cbegin(); i != vec.cend(); ++i)
+    for (auto i = vec.cbegin(); i != vec.cend()-2; ++i)
     {
-        for (auto j = i + 1; j != vec.cend(); ++j)
+        for (auto j = i + 1; j != vec.cend()-1; ++j)
         {
             for (auto k = j + 1; k != vec.cend(); ++k)
             {
                 if (*i + *j + *k == 0)
                 {
-                    std::vector<int> temp;
-                    temp.reserve(3);
-                    temp.push_back(*i);
-                    temp.push_back(*j);
-                    temp.push_back(*k);
+                    std::vector<int> temp{ *i, *j, *k };
 
                     if (!ArrayExisted(result, temp))
                         result.push_back(std::move(temp));
